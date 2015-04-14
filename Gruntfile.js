@@ -7,23 +7,25 @@ module.exports = function (grunt) {
 		}
 	});
 
-	grunt.registerTask("default", "start a web server", function() {
+	grunt.registerTask("default", "start a web server", function(port) {
 
-		var 
-			http = require("http"),
-			express = require("express"),
-			app = express(),
+		var
+			webServer = require("./web-server"),
 			webServerConfig = grunt.config("webServer");
 
-		this.async();
+			webServerConfig.port = port || webServerConfig.port; //returns Value of an operand. they don't return true or false
 
-		app.use(express.static(webServerConfig.rootFolder));
+			this.async();
+			webServer(webServerConfig, function() {
+				grunt
+					.log
+					.writeln("web server listening on port: " + webServerConfig.port);
+			});
 
-		http.createServer(app).listen(webServerConfig.port, function() {
-			grunt
-				.log
-				.writeln("web server listening on port: " + webServerConfig.port);
-		});
+	});
 
+	grunt.registerTask("haveABaby", function(name, age, height) {
+		console.log("Here comes my tax deduction!");
+		console.log(arguments);
 	});
 };
